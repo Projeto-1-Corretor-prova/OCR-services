@@ -1,0 +1,7 @@
+dotenv
+pytesseract
+opencv-python
+pillow
+fastapi
+uvicorn[standard]
+python-multipart

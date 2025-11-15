@@ -1,0 +1,9 @@
+data/*
+!data/.keep
+
+**/__pycache__
+
+temp/
+
+.env
+.vscode
