@@ -1,0 +1,11 @@
+services:
+  ocr-service:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: ocr-service
+    image: ghcr.io/projeto-1-corretor-prova/ocr-service:latest
+    env_file: .env
+    ports:
+      - $PORT:$PORT
+      

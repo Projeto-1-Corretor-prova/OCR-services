@@ -5,6 +5,7 @@ Here you can work on try integrate the ocr feature in our platform. All logic an
 ## Table of Contents
 1. [Work Environment](#create-your-work-environment)
 2. [Repository Tree Structure](#repository-tree-structure)
+3. [Service Usage](#service-usage)
 
 ## Create your Work Environment
 
@@ -44,4 +45,24 @@ pip install -r requirements
     │   ├── __init__.py
     │   ├── ...
     └── settings.py // Environment variables 
-```.
+```
+
+## Service Usage
+
+First of all, update your environment variables on .env file (If you don't have one, create from .env.example).
+
+If you want use locally in your python environment, you can just use this bash commands:
+
+```
+bash
+pip install -r requirements
+source .env
+uvicorn app.app:app --port $PORT --host 0.0.0.0
+```
+
+If you want use from docker compose, you can just use this bash commands (Remember, you will need docker and docker compose v2 to use it):
+
+```
+bash
+docker compose up --build
+```
