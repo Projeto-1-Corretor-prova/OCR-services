@@ -3,14 +3,14 @@ from fastapi import FastAPI, UploadFile
 from src.ocr import OCRManager, OCRResult
 from src.preprocess import PreProcessManager
 
-from os import mkdir
+from os import mkdir, remove
 from os.path import exists
 
 from pathlib import Path
 
 from shutil import copyfileobj
 
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 TEMP_DIR = "temp"
 
@@ -33,4 +33,9 @@ def extract_text_from_image(image: UploadFile) -> OCRResult:
         
     pre_process_manager.preprocess(f"{TEMP_DIR}/{id_image}{file_name_path.suffix}", f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
     
-    return ocr_manager.ocr(f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
+    ocr = ocr_manager.ocr(f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
+    
+    remove(f"{TEMP_DIR}/{id_image}{file_name_path.suffix}")
+    remove(f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
+    
+    return ocr
