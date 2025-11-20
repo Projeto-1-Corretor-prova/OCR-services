@@ -1,12 +1,10 @@
-FROM python:3.11-alpine as base
+FROM python:3.11-slim as base
 
 WORKDIR /service
 
-RUN apk add --no-cache build-base cmake clang python3-dev py3-numpy-dev \
-    libjpeg-turbo-dev libpng-dev tiff-dev libwebp-dev openjpeg-dev \
-    openblas-dev libtbb-dev
+RUN apt update
 
-RUN apk add --update tesseract-ocr tesseract-ocr-data-eng tesseract-ocr-data-por
+RUN apt install -y libtesseract-dev tesseract-ocr tesseract-ocr-eng tesseract-ocr-por libgl1
 
 COPY requirements.txt /service/requirements.txt
 
@@ -14,8 +12,8 @@ RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt --verbose
 
-COPY . /service/
+COPY app /service/app
 
-EXPOSE $PORT
+COPY src /service/src
 
-ENTRYPOINT [ "uvicorn", "app.app:app", "--port", "$PORT", "--host", "$0.0.0.0" ]
+ENTRYPOINT ["uvicorn", "app.app:app", "--host" , "0.0.0.0", "--port", "8000"]

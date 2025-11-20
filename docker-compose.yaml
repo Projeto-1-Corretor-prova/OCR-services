@@ -7,5 +7,5 @@ services:
     image: ghcr.io/projeto-1-corretor-prova/ocr-service:latest
     env_file: .env
     ports:
-      - $PORT:$PORT
+      - $PORT:8000
       
