@@ -1,23 +1,23 @@
 from abc import ABC
 
 class PreProcessInterface(ABC):
-    def preprocess(self, image_file_path: str, output_path: str) -> None:
-        """Pre process a image from original path.
+    def preprocess(self, pre_processer_input) -> None:
+        """Pre Process pictures for future OCR
 
         Args:
-            image_file_path (str): original image path.
-            output_path (str): original image pre processed final path.
+            pre_processer_input (PreProcesserInput): Pre process input
+
         """
         raise NotImplementedError("This is just a interface method!")
     
 class OCRInterface(ABC):
-    def ocr(self, image_file_path: str) -> str:
-        """Optical Character Recognition from image file path.
+    def ocr(self, ocr_input):
+        """ Generate the OCR from pictures
 
         Args:
-            image_file_path (str): Original image path.
-
+            ocr_input (OCRInput): OCR input
+            
         Returns:
-            str: Optical characters recognized.
+            OCRResult: OCR result
         """
         raise NotImplementedError("This is just a interface method!")

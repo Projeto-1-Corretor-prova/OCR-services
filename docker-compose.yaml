@@ -8,4 +8,41 @@ services:
     env_file: .env
     ports:
       - $PORT:8000
-      
+  
+  minio:
+    image: minio/minio
+    container_name: minio
+    env_file: .env
+    command: [ "server", "--console-address", ":9001", "/data" ]
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    hostname: "rabbit"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file: .env
+    configs:
+      - source: rabbitmq-plugins
+        target: /etc/rabbitmq/enabled_plugins
+    volumes:
+      - rabbitmq-lib:/var/lib/rabbitmq/
+      - rabbitmq-log:/var/log/rabbitmq
+
+configs:
+  rabbitmq-plugins:
+    content: "[rabbitmq_management]." 
+
+volumes:
+  minio_data:
+    driver: local
+  rabbitmq-lib:
+    driver: local
+  rabbitmq-log:
+    driver: local

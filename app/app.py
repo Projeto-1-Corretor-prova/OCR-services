@@ -1,10 +1,11 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI
 
-from src.ocr import OCRManager, OCRResult
+from app.files.file_manager import FileManager
+
+from src.consts import ORIGINAL_FILES, PROCESSED_FILES
+from src.ocr import OCRManager
+from src.pipeline import Pipeline, PipelineModel, OCRResult
 from src.preprocess import PreProcessManager
-
-from os import mkdir, remove
-from os.path import exists
 
 from pathlib import Path
 
@@ -19,23 +20,30 @@ app = FastAPI()
 ocr_manager = OCRManager()
 pre_process_manager = PreProcessManager()
 
-if not exists(TEMP_DIR):
-    mkdir(TEMP_DIR)
+pipeline = Pipeline(pre_process_manager, ocr_manager)
 
-@app.post("/extract-text-from-image")
-def extract_text_from_image(image: UploadFile) -> OCRResult:
-    id_image = uuid4()
+file_manager = FileManager()
+
+from typing_extensions import TypedDict
+
+class Input(TypedDict):
+    storage_path: str
+    regex_question: str
+
+@app.post("/extract-answers")
+def extract_text_from_image(input_api: Input) -> OCRResult:
     
-    file_name_path = Path(image.filename)
+    storage_path = input_api["storage_path"]
     
-    with open(f"{TEMP_DIR}/{id_image}{file_name_path.suffix}", 'wb') as f:
-        copyfileobj(image.file, f)
-        
-    pre_process_manager.preprocess(f"{TEMP_DIR}/{id_image}{file_name_path.suffix}", f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
+    temp_folder = file_manager.download(storage_path)
     
-    ocr = ocr_manager.ocr(f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
+    pipeline_input: PipelineModel = {
+        "ocr_path": f"{temp_folder}/{PROCESSED_FILES}",
+        "pre_process_path": f"{temp_folder}/{ORIGINAL_FILES}",
+        "pre_processed_dir_path": f"{temp_folder}/{PROCESSED_FILES}",
+        "regex_question": input_api["regex_question"]
+    }
     
-    remove(f"{TEMP_DIR}/{id_image}{file_name_path.suffix}")
-    remove(f"{TEMP_DIR}/{id_image}-preprocessed{file_name_path.suffix}")
+    ocr_result = pipeline.run(pipeline_input)
     
-    return ocr
+    return ocr_result
