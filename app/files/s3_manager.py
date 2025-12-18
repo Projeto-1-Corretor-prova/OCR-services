@@ -26,7 +26,6 @@ class S3Manager:
         
         bucket = self.__s3.Bucket(Settings.bucket_name)
 
-        # garante barra final
         if not storage_path.endswith("/"):
             storage_path += "/"
 
