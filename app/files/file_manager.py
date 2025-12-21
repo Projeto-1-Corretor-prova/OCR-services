@@ -1,6 +1,8 @@
-from os import mkdir, listdir, remove
+from os import mkdir, listdir
 
 from os.path import exists
+
+from shutil import rmtree
 
 from uuid import uuid4
 
@@ -58,4 +60,4 @@ class FileManager:
         Args:
             temp_dir (str): temp dir
         """
-        remove(temp_dir)
+        rmtree(temp_dir)

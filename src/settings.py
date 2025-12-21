@@ -8,6 +8,7 @@ class Settings:
     tesseract_language = getenv("TESSERACT_LANGUAGE")
     tesseract_configuration = getenv("TESSERACT_CONFIGURATION")
     consumer_threads = int(getenv("CONSUMER_THREADS"))
+    log_level = int(getenv("LOG_LEVEL"))
     
     redis_user = getenv("REDIS_USER")
     redis_password = getenv("REDIS_PASSWORD")
