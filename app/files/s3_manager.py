@@ -15,10 +15,6 @@ class S3Manager:
             aws_secret_access_key=Settings.storage_secret_access_key,
             region_name=Settings.storage_region,
         )
-        
-        print("Bucket:", Settings.storage_bucket_name)
-        print("Cliente:", self.__s3)
-        
     
     def download(self, storage_path: str, local_path: str) -> None:
         """Download written tests from minio
@@ -30,7 +26,6 @@ class S3Manager:
         
         bucket = self.__s3.Bucket(Settings.storage_bucket_name)
 
-        # garante barra final
         if not storage_path.endswith("/"):
             storage_path += "/"
 
