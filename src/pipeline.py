@@ -2,13 +2,14 @@ from os import mkdir, listdir
 from os.path import exists
 
 from re import match
+from typing import Optional
 
 from src.interfaces import OCRInterface, PreProcessInterface
 from src.ocr.models import OCRInput, OCRResult
 from src.preprocess.models import PreProcesserInput
 
 class PipelineModel(PreProcesserInput, OCRInput):
-    pass
+    pre_process: Optional[bool] = True
     
 class Pipeline:
 
@@ -39,11 +40,14 @@ class Pipeline:
         if not any(students):
             raise FileNotFoundError("No student found.")
         
-        self.__pre_processer.preprocess({
-            "pre_process_path": pipeline_input["pre_process_path"],
-            "pre_processed_dir_path": pipeline_input["pre_processed_dir_path"]
-            })
-        
+        if pipeline_input["pre_process"]:
+            self.__pre_processer.preprocess({
+                "pre_process_path": pipeline_input["pre_process_path"],
+                "pre_processed_dir_path": pipeline_input["pre_processed_dir_path"]
+                })
+        else:
+            pipeline_input["pre_processed_dir_path"] = pipeline_input["pre_process_path"]
+                
         ocr_result = self.__ocr_manager.ocr({
             "ocr_path": pipeline_input["pre_processed_dir_path"],
             "regex_question": pipeline_input["regex_question"]

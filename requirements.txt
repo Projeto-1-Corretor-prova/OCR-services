@@ -6,3 +6,4 @@ fastapi
 uvicorn[standard]
 python-multipart
 boto3
+redis

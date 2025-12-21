@@ -1,4 +1,4 @@
-from os import mkdir, listdir
+from os import mkdir, listdir, remove
 
 from os.path import exists
 
@@ -51,3 +51,11 @@ class FileManager:
             mkdir(f"{temp_folder_name_processed}/{student}")
             
         return temp_folder_name
+    
+    def remove(self, temp_dir: str) -> None:
+        """ Remove temp dir
+
+        Args:
+            temp_dir (str): temp dir
+        """
+        remove(temp_dir)

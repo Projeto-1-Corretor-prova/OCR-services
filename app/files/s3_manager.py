@@ -16,7 +16,7 @@ class S3Manager:
             region_name=Settings.storage_region,
         )
         
-        print("Bucket:", Settings.bucket_name)
+        print("Bucket:", Settings.storage_bucket_name)
         print("Cliente:", self.__s3)
         
     
@@ -28,7 +28,7 @@ class S3Manager:
             local_path (str): local path (to download)
         """
         
-        bucket = self.__s3.Bucket(Settings.bucket_name)
+        bucket = self.__s3.Bucket(Settings.storage_bucket_name)
 
         # garante barra final
         if not storage_path.endswith("/"):
